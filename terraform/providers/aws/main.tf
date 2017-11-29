@@ -80,7 +80,7 @@ resource "aws_subnet" "kismatic_public" {
   cidr_block  = "10.0.1.0/24"
   map_public_ip_on_launch = "True"
   tags {
-    Name                  = "${var.cluster_name}-public-subnet"
+    Name                  = "${var.cluster_name}-subnet-public"
     kismatic/clusterName  = "${var.cluster_name}"
     kismatic/clusterOwner = "${var.cluster_owner}"
     kismatic/timestamp    = "${timestamp()}"
@@ -96,7 +96,7 @@ resource "aws_subnet" "kismatic_private" {
   map_public_ip_on_launch = "True"
   #This needs to be false eventually
   tags {
-    Name                  = "${var.cluster_name}-private-subnet"
+    Name                  = "${var.cluster_name}-subnet-private"
     kismatic/clusterName  = "${var.cluster_name}"
     kismatic/clusterOwner = "${var.cluster_owner}"
     kismatic/timestamp    = "${timestamp()}"
