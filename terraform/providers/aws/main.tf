@@ -13,12 +13,12 @@ data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    "Name"   = ""Name""
+    Name   = "name"
     values = ["${var.ami}"]
   }
 
   filter {
-    "Name"   = "virtualization-type"
+    Name   = "virtualization-type"
     values = ["hvm"]
   }
 
