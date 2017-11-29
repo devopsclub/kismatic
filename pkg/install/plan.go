@@ -313,10 +313,6 @@ func buildPlanFromTemplateOptions(templateOpts PlanTemplateOptions) Plan {
 	switch templateOpts.InfrastructureProvisioner {
 	case "aws":
 		p.Provisioner.AWSOptions = &AWSProvisionerOptions{}
-		// TODO: only support ubuntu for now. add support for RHEL/CentOS
-		// This causes failure down the line if not set in the plan.
-		// This information should also encapsulate the desired OS the user wants to run on.
-		p.Cluster.SSH.User = "ubuntu"
 	}
 
 	// Set Networking defaults
