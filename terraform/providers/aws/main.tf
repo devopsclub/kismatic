@@ -13,12 +13,12 @@ data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    name   = "name"
+    "Name"   = ""Name""
     values = ["${var.ami}"]
   }
 
   filter {
-    name   = "virtualization-type"
+    "Name"   = "virtualization-type"
     values = ["hvm"]
   }
 
@@ -35,24 +35,24 @@ resource "aws_vpc" "kismatic" {
   enable_dns_support    = true
   enable_dns_hostnames  = true
   tags {
-    Name                  = "${var.cluster_name}-vpc"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-vpc"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
 resource "aws_internet_gateway" "kismatic_gateway" {
   vpc_id = "${aws_vpc.kismatic.id}"
   tags {
-    Name                  = "${var.cluster_name}-gateway"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-gateway"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
@@ -65,12 +65,12 @@ resource "aws_default_route_table" "kismatic_router" {
   }
 
   tags {
-    Name                  = "${var.cluster_name}-router"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-router"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
@@ -80,13 +80,13 @@ resource "aws_subnet" "kismatic_public" {
   cidr_block  = "10.0.1.0/24"
   map_public_ip_on_launch = "True"
   tags {
-    Name                  = "${var.cluster_name}-subnet-public"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/subnet       = "public"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-subnet-public"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/subnet"       = "public"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
@@ -96,18 +96,18 @@ resource "aws_subnet" "kismatic_private" {
   map_public_ip_on_launch = "True"
   #This needs to be false eventually
   tags {
-    Name                  = "${var.cluster_name}-subnet-private"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/subnet       = "private"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-subnet-private"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/subnet"       = "private"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
 resource "aws_security_group" "kismatic_sec_group" {
-  name        = "${var.cluster_name}"
+  "Name"        = "${var.cluster_name}"
   description = "Allow inbound SSH for kismatic, and all communication between nodes."
   vpc_id      = "${aws_vpc.kismatic.id}"
 
@@ -147,13 +147,13 @@ resource "aws_security_group" "kismatic_sec_group" {
   }
 
   tags {
-    Name                  = "${var.cluster_name}-securityGroup-public"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/securityGroup = "public"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-securityGroup-public"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/securityGroup" = "public"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 }
 
@@ -165,13 +165,13 @@ resource "aws_instance" "master" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    Name                  = "${var.cluster_name}-node-master"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/nodeRoles    = "master"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-node-master"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/nodeRoles"    = "master"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 
   provisioner "remote-exec" {
@@ -194,13 +194,13 @@ resource "aws_instance" "etcd" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    Name                  = "${var.cluster_name}-node-etcd"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/nodeRoles    = "etcd"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-node-etcd"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/nodeRoles"    = "etcd"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 
   provisioner "remote-exec" {
@@ -223,13 +223,13 @@ resource "aws_instance" "worker" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    Name                  = "${var.cluster_name}-node-worker"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/nodeRoles    = "worker"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-node-worker"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/nodeRoles"    = "worker"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 
   provisioner "remote-exec" {
@@ -252,13 +252,13 @@ resource "aws_instance" "ingress" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    Name                  = "${var.cluster_name}-node-ingress"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/nodeRoles    = "ingress"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-node-ingress"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/nodeRoles"    = "ingress"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 
   provisioner "remote-exec" {
@@ -281,13 +281,13 @@ resource "aws_instance" "storage" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    Name                  = "${var.cluster_name}-node-storage"
-    kismatic/clusterName  = "${var.cluster_name}"
-    kismatic/clusterOwner = "${var.cluster_owner}"
-    kismatic/timestamp    = "${timestamp()}"
-    kismatic/version      = "${var.version}"
-    kismatic/nodeRoles    = "storage"
-    kubernetes.io/cluster = "${var.cluster_name}"
+    "Name"                  = "${var.cluster_name}-node-storage"
+    "kismatic/clusterName"  = "${var.cluster_name}"
+    "kismatic/clusterOwner" = "${var.cluster_owner}"
+    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/version"      = "${var.version}"
+    "kismatic/nodeRoles"    = "storage"
+    "kubernetes.io/cluster" = "${var.cluster_name}"
   }
 
   provisioner "remote-exec" {
