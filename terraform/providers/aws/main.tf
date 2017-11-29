@@ -13,12 +13,12 @@ data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    Name   = "name"
+    name   = "name"
     values = ["${var.ami}"]
   }
 
   filter {
-    Name   = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
 
@@ -107,7 +107,7 @@ resource "aws_subnet" "kismatic_private" {
 }
 
 resource "aws_security_group" "kismatic_sec_group" {
-  "Name"        = "${var.cluster_name}"
+  name        = "${var.cluster_name}"
   description = "Allow inbound SSH for kismatic, and all communication between nodes."
   vpc_id      = "${aws_vpc.kismatic.id}"
 
