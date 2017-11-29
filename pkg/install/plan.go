@@ -297,12 +297,6 @@ func WritePlanTemplate(planTemplateOpts PlanTemplateOptions, w PlanReadWriter) e
 // template options
 func buildPlanFromTemplateOptions(templateOpts PlanTemplateOptions) Plan {
 	p := Plan{}
-	p.Provisioner.Provider = templateOpts.InfrastructureProvisioner
-	// set provisioner's provider specific options
-	switch templateOpts.InfrastructureProvisioner {
-	case "aws":
-		p.Provisioner.AWSOptions = &AWSProvisionerOptions{}
-	}
 
 	p.Cluster.Name = templateOpts.ClusterName
 	p.Cluster.AdminPassword = templateOpts.AdminPassword
@@ -313,6 +307,17 @@ func buildPlanFromTemplateOptions(templateOpts PlanTemplateOptions) Plan {
 	p.Cluster.SSH.User = ""
 	p.Cluster.SSH.Key = ""
 	p.Cluster.SSH.Port = 22
+
+	p.Provisioner.Provider = templateOpts.InfrastructureProvisioner
+	// set provisioner's provider specific options
+	switch templateOpts.InfrastructureProvisioner {
+	case "aws":
+		p.Provisioner.AWSOptions = &AWSProvisionerOptions{}
+		// TODO: only support ubuntu for now. add support for RHEL/CentOS
+		// This causes failure down the line if not set in the plan.
+		// This information should also encapsulate the desired OS the user wants to run on.
+		p.Cluster.SSH.User = "ubuntu"
+	}
 
 	// Set Networking defaults
 	p.Cluster.Networking.PodCIDRBlock = "172.16.0.0/16"

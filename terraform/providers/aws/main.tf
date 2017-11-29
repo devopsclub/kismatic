@@ -38,9 +38,12 @@ resource "aws_vpc" "kismatic" {
     "Name"                  = "${var.cluster_name}-vpc"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -50,9 +53,12 @@ resource "aws_internet_gateway" "kismatic_gateway" {
     "Name"                  = "${var.cluster_name}-gateway"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -68,9 +74,12 @@ resource "aws_default_route_table" "kismatic_router" {
     "Name"                  = "${var.cluster_name}-router"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -83,10 +92,13 @@ resource "aws_subnet" "kismatic_public" {
     "Name"                  = "${var.cluster_name}-subnet-public"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/subnet"       = "public"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -99,10 +111,13 @@ resource "aws_subnet" "kismatic_private" {
     "Name"                  = "${var.cluster_name}-subnet-private"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/subnet"       = "private"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -150,10 +165,13 @@ resource "aws_security_group" "kismatic_sec_group" {
     "Name"                  = "${var.cluster_name}-securityGroup-public"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/securityGroup" = "public"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 }
 
@@ -165,13 +183,16 @@ resource "aws_instance" "master" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    "Name"                  = "${var.cluster_name}-node-master"
+    "Name"                  = "${var.cluster_name}-master-${count.index}"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/nodeRoles"    = "master"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 
   provisioner "remote-exec" {
@@ -181,7 +202,7 @@ resource "aws_instance" "master" {
       type = "ssh"
       user = "${var.ssh_user}"
       private_key = "${file("${var.private_ssh_key_path}")}"
-      timeout = "2m"
+      timeout = "5m"
     }
   }
 }
@@ -194,13 +215,16 @@ resource "aws_instance" "etcd" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    "Name"                  = "${var.cluster_name}-node-etcd"
+    "Name"                  = "${var.cluster_name}-etcd-${count.index}"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/nodeRoles"    = "etcd"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 
   provisioner "remote-exec" {
@@ -210,7 +234,7 @@ resource "aws_instance" "etcd" {
       type = "ssh"
       user = "${var.ssh_user}"
       private_key = "${file("${var.private_ssh_key_path}")}"
-      timeout = "2m"
+      timeout = "5m"
     }
   }
 }
@@ -223,13 +247,16 @@ resource "aws_instance" "worker" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    "Name"                  = "${var.cluster_name}-node-worker"
+    "Name"                  = "${var.cluster_name}-worker-${count.index}"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/nodeRoles"    = "worker"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 
   provisioner "remote-exec" {
@@ -239,7 +266,7 @@ resource "aws_instance" "worker" {
       type = "ssh"
       user = "${var.ssh_user}"
       private_key = "${file("${var.private_ssh_key_path}")}"
-      timeout = "2m"
+      timeout = "5m"
     }
   }
 }
@@ -252,13 +279,16 @@ resource "aws_instance" "ingress" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    "Name"                  = "${var.cluster_name}-node-ingress"
+    "Name"                  = "${var.cluster_name}-ingress-${count.index}"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/nodeRoles"    = "ingress"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 
   provisioner "remote-exec" {
@@ -268,7 +298,7 @@ resource "aws_instance" "ingress" {
       type = "ssh"
       user = "${var.ssh_user}"
       private_key = "${file("${var.private_ssh_key_path}")}"
-      timeout = "2m"
+      timeout = "5m"
     }
   }
 }
@@ -281,13 +311,16 @@ resource "aws_instance" "storage" {
   ami                     = "${data.aws_ami.ubuntu.id}"
   instance_type           = "${var.instance_size}"
   tags {
-    "Name"                  = "${var.cluster_name}-node-storage"
+    "Name"                  = "${var.cluster_name}-storage-${count.index}"
     "kismatic/clusterName"  = "${var.cluster_name}"
     "kismatic/clusterOwner" = "${var.cluster_owner}"
-    "kismatic/timestamp"    = "${timestamp()}"
+    "kismatic/dateCreated"    = "${timestamp()}"
     "kismatic/version"      = "${var.version}"
     "kismatic/nodeRoles"    = "storage"
     "kubernetes.io/cluster" = "${var.cluster_name}"
+  }
+  lifecycle {
+    ignore_changes = ["tags.kismatic/dateCreated", "tags.Owner", "tags.PrincipalID"]
   }
 
   provisioner "remote-exec" {
@@ -297,7 +330,7 @@ resource "aws_instance" "storage" {
       type = "ssh"
       user = "${var.ssh_user}"
       private_key = "${file("${var.private_ssh_key_path}")}"
-      timeout = "2m"
+      timeout = "5m"
     }
   }
 }
