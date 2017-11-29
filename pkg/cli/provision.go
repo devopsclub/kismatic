@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 
 	"github.com/apprenda/kismatic/pkg/install"
 	"github.com/apprenda/kismatic/pkg/provision"
@@ -37,6 +38,8 @@ func NewCmdProvision(in io.Reader, out io.Writer, opts *installOpts) *cobra.Comm
 				Output:     out,
 				BinaryPath: filepath.Join(path, "terraform/bin/terraform"),
 				Owner:      user.Username,
+				Version:    install.KismaticVersion,
+				Timestamp:  time.Now().UTC(),
 			}
 			switch plan.Provisioner.Provider {
 			case "aws":

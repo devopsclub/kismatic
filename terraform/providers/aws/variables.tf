@@ -10,6 +10,14 @@ variable "secret_key" {
   default = ""
 }
 
+variable "timestamp" {
+  default = ""
+}
+
+variable "version" {
+  default = ""
+}
+
 variable "private_ssh_key_path" {
   default = ""
 }

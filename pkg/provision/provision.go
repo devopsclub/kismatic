@@ -8,6 +8,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
+
+	"github.com/blang/semver"
 
 	"github.com/apprenda/kismatic/pkg/install"
 )
@@ -19,6 +22,8 @@ type Terraform struct {
 	Output     io.Writer
 	BinaryPath string
 	Owner      string
+	Version    semver.Version
+	Timestamp  time.Time
 	Logger     *log.Logger
 }
 
