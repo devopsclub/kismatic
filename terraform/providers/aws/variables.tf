@@ -24,7 +24,7 @@ variable "public_ssh_key_path" {
 }
 
 variable "ssh_user" {
-  default = ""
+  default = "ubuntu"
 }
 
 variable "cluster_name" {
