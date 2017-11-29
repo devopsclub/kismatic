@@ -12,6 +12,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/apprenda/kismatic/pkg/install"
+
 	"github.com/apprenda/kismatic/pkg/controller"
 	"github.com/apprenda/kismatic/pkg/provision"
 	"github.com/apprenda/kismatic/pkg/server/http"
@@ -117,6 +119,7 @@ func doServer(stdout io.Writer, options serverOptions) error {
 	terraform := provision.Terraform{
 		Output:     os.Stdout,
 		BinaryPath: filepath.Join(pwd, "terraform/bin/terraform"),
+		Version:    install.KismaticVersion,
 	}
 
 	ctrl := controller.New(
