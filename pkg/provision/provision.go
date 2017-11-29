@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"time"
 
 	"github.com/blang/semver"
 
@@ -23,7 +22,6 @@ type Terraform struct {
 	BinaryPath string
 	Owner      string
 	Version    semver.Version
-	Timestamp  time.Time
 	Logger     *log.Logger
 }
 
